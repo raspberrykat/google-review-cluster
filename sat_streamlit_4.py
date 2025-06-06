@@ -9,14 +9,14 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_har
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 
-# Page Configuration
+# Page Conf
 st.set_page_config(layout="wide", page_title="Google Reviews Clustering", page_icon="📊")
 
 # Utility Functions (Caching expensive operations)
 @st.cache_data
 def load_data(file_path):
     df = pd.read_csv(file_path)
-    # Original column renaming
+    # Column renaming
     df = df.rename(columns={
         'Category 1': 'churches', 'Category 2': 'resorts', 'Category 3': 'beaches',
         'Category 4': 'parks', 'Category 5': 'theatres', 'Category 6': 'museums',
@@ -139,7 +139,7 @@ def _handle_outliers(df_to_clean):
 
 # Streamlit Layout
 
-# Sidebar for User Inputs
+# Sidebar
 st.sidebar.header("🔧 Model Configuration")
 
 REC_SCALER = "QuantileTransformer" 
@@ -190,7 +190,7 @@ The process involves:
 """)
 st.markdown("---")
 
-# Section 2: Show the Dataset
+# Section 2: Dataset
 st.header("💾 Dataset Overview")
 df_raw = load_data('google_review_ratings.csv') 
 st.subheader("Raw Data Preview (First 5 Rows)")
@@ -199,7 +199,7 @@ st.write(f"The raw dataset has **{df_raw.shape[0]}** rows and **{df_raw.shape[1]
 st.write(f"Initial column names: `{df_raw.columns.tolist()}`") 
 st.markdown("---")
 
-# Section 3: Data Preprocessing
+# Section 3: Preprocessing
 st.header("⚙️ Data Preprocessing")
 with st.expander("Show Preprocessing Details", expanded=False):
     st.markdown("""
@@ -220,7 +220,7 @@ st.write(f"Column names: `{df_processed_initial.columns.tolist()}`")
 st.markdown("---")
 
 
-# Section 4: Feature Engineering, Reduction & Outlier Handling
+# Section 4: Feature Engineering
 st.header("🛠️ Feature Engineering, Reduction & Outlier Handling")
 with st.expander("Show Feature Engineering & Outlier Handling Details", expanded=True): 
     st.markdown("""
@@ -250,7 +250,7 @@ st.subheader("Features After Aggregation (Before Interactive Drop & Outlier Hand
 st.dataframe(df_engineered_features.head())
 st.write(f"Dataset after feature aggregation has **{df_engineered_features.shape[0]}** rows and **{df_engineered_features.shape[1]}** columns.")
 
-# Interactive Feature Dropping
+# Feature Dropping
 st.subheader("Interactive Feature Dropping (based on your analysis)")
 df_for_interactive_drop = df_engineered_features.copy()
 numeric_cols_for_interactive_drop = df_for_interactive_drop.select_dtypes(include=np.number)
@@ -259,7 +259,7 @@ features_to_drop_interactive = []
 if not numeric_cols_for_interactive_drop.empty and numeric_cols_for_interactive_drop.shape[1] > 1:
     corr_threshold_interactive = st.slider(
         "Set max absolute correlation threshold for drop suggestion:",
-        min_value=0.0, max_value=1.0, value=0.4, step=0.05,
+        min_value=0.0, max_value=1.0, value=0.0, step=0.05,
         help="Features whose max absolute correlation with any *other single* feature is *less than* this value will be suggested for dropping."
     )
     
@@ -622,7 +622,7 @@ else:
             plt.close(fig_lda_cluster)
 st.markdown("---")
 
-# --- Section 7: Model Evaluation ---
+# Section 7: Model Evaluation
 st.header("🏅 Model Evaluation")
 
 if k_option >= 2 and df_scaled.shape[0] > 1 and not df_scaled.empty and len(np.unique(cluster_labels)) > 1:

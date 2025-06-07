@@ -678,7 +678,7 @@ if 'df_clustered_display' in locals() and not df_clustered_display.empty:
         label="📥 Download Full Clustered Data as CSV",
         data=csv,
         file_name='clustered_google_reviews_data.csv',
-        mime='text/csv',
+        mime='text/csv'
     )
 else:
     st.info("Clustered data preview is not available (likely due to an issue in the clustering step).")

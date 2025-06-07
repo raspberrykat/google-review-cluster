@@ -680,7 +680,7 @@ if 'df_clustered_display' in locals() and not df_clustered_display.empty:
             file_name='clustered_google_reviews_data.csv',
             mime='text/csv',
             key='download-csv'
-    )
+        )
     except Exception as e:
         st.error(f"Error {e}")
 else:

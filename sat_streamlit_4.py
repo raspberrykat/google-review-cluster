@@ -669,7 +669,17 @@ else:
 st.markdown("---")
 st.subheader("Final Clustered Data Preview (Original Features with Cluster Labels)")
 if 'df_clustered_display' in locals() and not df_clustered_display.empty:
-    st.dataframe(df_clustered_display.head()) 
+    st.dataframe(df_clustered_display.head())
+    @st.cache_data
+    def convert_df_to_csv(df):
+        return df.to_csv(index=False).encode('utf-8')
+    csv = convert_df_to_csv(df_clustered_display)
+    st.download_button(
+        label="📥 Download Full Clustered Data as CSV",
+        data=csv,
+        file_name='clustered_google_reviews_data.csv',
+        mime='text/csv',
+    )
 else:
     st.info("Clustered data preview is not available (likely due to an issue in the clustering step).")
 
